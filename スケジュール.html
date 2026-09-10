@@ -46,6 +46,31 @@
     letter-spacing:.02em;
   }
 
+  .hero-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+  }
+  .hero-photo{
+    flex:none;
+    width:84px;
+    height:84px;
+    object-fit:cover;
+    display:block;
+  }
+  .hero-photo-fallback{
+    flex:none;
+    width:84px;
+    height:84px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:#e7e0cd;
+    color:#a89a7d;
+  }
+  .hero-photo-fallback svg{ width:26px; height:26px; }
+
   /* ---------- CARDS ---------- */
   .cards{
     padding:26px 24px 0;
@@ -105,23 +130,131 @@
     color:var(--navy);
   }
   .signature .amp{ color:var(--terracotta); margin:0 8px; }
+
+  /* ---------- REVEAL (浮き上がりアニメーション) ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .9s cubic-bezier(.16,.8,.24,1), transform .9s cubic-bezier(.16,.8,.24,1);
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ---------- PRELOADER ---------- */
+  .preloader{
+    position:fixed; inset:0;
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    z-index:999;
+    transition:opacity 1s ease;
+  }
+  .preloader.fade-out{ opacity:0; pointer-events:none; }
+  .preloader-inner{
+    display:flex; flex-direction:column; align-items:center; gap:16px;
+  }
+  .preloader-photo{
+    position:relative;
+    width:150px; height:150px;
+    border-radius:50%;
+    opacity:0;
+    animation:preloaderFade 1.4s ease forwards;
+  }
+  .preloader-photo::after{
+    content:"";
+    position:absolute; inset:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.35);
+    pointer-events:none;
+  }
+  .preloader-img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  .preloader-img.active{ opacity:1; }
+  .preloader-fallback{
+    position:absolute; inset:0;
+    border-radius:50%;
+    background:#e7e0cd;
+    display:none;
+    align-items:center; justify-content:center;
+  }
+  .preloader-fallback svg{ width:36px; height:36px; color:#a89a7d; }
+  .preloader-label{
+    font-family:"Fredoka", sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:.2em;
+    color:var(--teal);
+    opacity:0;
+    animation:preloaderFade 1.4s ease .2s forwards;
+  }
+  @keyframes preloaderFade{
+    from{ opacity:0; transform:translateY(6px) scale(.96); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .preloader-photo, .preloader-label{ animation:none; opacity:1; }
+    .preloader-img{ transition:none; }
+  }
 </style>
 </head>
 <body>
+<div class="preloader" id="preloader">
+  <div class="preloader-inner">
+    <div class="preloader-photo">
+      <!-- 1枚目・2枚目の写真URLをそれぞれ置き換えてください -->
+      <img src="REPLACE_WITH_PHOTO_1.jpg" alt="" class="preloader-img active"
+        onerror="this.style.display='none'; document.querySelector('.preloader-fallback').style.display='flex';">
+      <img src="REPLACE_WITH_PHOTO_2.jpg" alt="" class="preloader-img"
+        onerror="this.style.display='none';">
+      <div class="preloader-fallback">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="3" y="6" width="18" height="14" rx="2"/>
+          <circle cx="12" cy="13" r="3.5"/>
+          <path d="M8 6l1.5-2h5L16 6"/>
+        </svg>
+      </div>
+    </div>
+    <div class="preloader-label">MASAKAZU &amp; FUMIKA</div>
+  </div>
+</div>
 <div class="page">
 
-  <div class="hero">
-    <h1>Wedding<br>Schedule</h1>
-    <svg class="squiggle" width="220" height="20" viewBox="0 0 220 20" fill="none">
-      <path d="M2 12 Q 30 2, 58 12 T 114 12 T 170 12 T 218 10"
-        stroke="var(--sky)" stroke-width="3.5" stroke-linecap="round"/>
-    </svg>
-    <p class="venue">会場：アルカンシエル南青山（挙式・披露宴とも同会場）</p>
+  <div class="hero reveal">
+    <div class="hero-top">
+      <div>
+        <h1>Wedding<br>Schedule</h1>
+        <svg class="squiggle" width="220" height="20" viewBox="0 0 220 20" fill="none">
+          <path d="M2 12 Q 30 2, 58 12 T 114 12 T 170 12 T 218 10"
+            stroke="var(--sky)" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <p class="venue">会場：アルカンシエル南青山（挙式・披露宴とも同会場）</p>
+      </div>
+      <!-- 写真を差し込む場合はsrcを実際の画像URLに置き換えてください -->
+      <img src="トップページ素材①.png" alt="" class="hero-photo"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="hero-photo-fallback">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <rect x="3" y="6" width="18" height="14" rx="2"/>
+          <circle cx="12" cy="13" r="3.5"/>
+          <path d="M8 6l1.5-2h5L16 6"/>
+        </svg>
+      </div>
+    </div>
   </div>
 
   <div class="cards">
 
-    <div class="card teal">
+    <div class="card teal reveal">
       <div class="icon-tile">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2">
           <path d="M3 20h18M6 20V9l6-4 6 4v11M10 20v-6h4v6"/>
@@ -134,7 +267,7 @@
       </div>
     </div>
 
-    <div class="card terracotta">
+    <div class="card terracotta reveal">
       <div class="icon-tile">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2">
           <circle cx="8" cy="15" r="4.2"/><circle cx="16" cy="15" r="4.2"/>
@@ -146,7 +279,7 @@
       </div>
     </div>
 
-    <div class="card teal">
+    <div class="card teal reveal">
       <div class="icon-tile">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2">
           <path d="M7 3v6a2 2 0 002 2v10M7 6h4M17 3l-2 8h4l-2-8zM17 11v10"/>
@@ -158,7 +291,7 @@
       </div>
     </div>
 
-    <div class="card terracotta">
+    <div class="card terracotta reveal">
       <div class="icon-tile">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2">
           <path d="M4 10c0 4 3.5 8 8 8s8-4 8-8M4 10h16M4 10l1-5h14l1 5"/>
@@ -170,14 +303,14 @@
       </div>
     </div>
 
-    <div class="card teal">
+    <div class="card teal reveal">
       <div class="icon-tile">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2">
           <path d="M12 20s-7-4.5-7-9.5A4.5 4.5 0 0112 8a4.5 4.5 0 017 2.5C19 15.5 12 20 12 20z"/>
         </svg>
       </div>
       <div class="info">
-        <div class="time">13:30</div>
+        <div class="time">13:00</div>
         <div class="label">結び</div>
         <div class="note"></div>
       </div>
@@ -185,10 +318,48 @@
 
   </div>
 
-  <div class="signature">
+  <div class="signature reveal">
     <div class="names-middle">三俣正和<span class="amp">&amp;</span>小池扶美香</div>
   </div>
 
 </div>
+
+<script>
+  window.addEventListener('load', function(){
+    var preloader = document.getElementById('preloader');
+    var hero = document.querySelector('.hero');
+
+    setTimeout(function(){
+      var imgs = document.querySelectorAll('.preloader-img');
+      if(imgs.length === 2){
+        imgs[0].classList.remove('active');
+        imgs[1].classList.add('active');
+      }
+    }, 1600);
+
+    setTimeout(function(){
+      preloader.classList.add('fade-out');
+      if(hero) hero.classList.add('visible');
+      setTimeout(function(){ preloader.style.display = 'none'; }, 1000);
+    }, 3000);
+  });
+
+  (function(){
+    var revealEls = document.querySelectorAll('.reveal:not(.hero)');
+    if('IntersectionObserver' in window){
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {threshold:0.15});
+      revealEls.forEach(function(el){ observer.observe(el); });
+    } else {
+      revealEls.forEach(function(el){ el.classList.add('visible'); });
+    }
+  })();
+</script>
 </body>
 </html>
