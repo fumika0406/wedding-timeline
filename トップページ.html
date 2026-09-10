@@ -204,6 +204,19 @@
   @media (prefers-reduced-motion: reduce){
     .preloader-img, .preloader-fallback, .preloader-label{ animation:none; opacity:1; }
   }
+   /* ---------- REVEAL (浮き上がりアニメーション) ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .9s cubic-bezier(.16,.8,.24,1), transform .9s cubic-bezier(.16,.8,.24,1);
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
 </style>
 </head>
 <body>
