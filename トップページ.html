@@ -159,7 +159,7 @@
     color:var(--ink-soft);
     letter-spacing:.08em;
   }
-    /* ---------- PRELOADER ---------- */
+/* ---------- PRELOADER ---------- */
   .preloader{
     position:fixed; inset:0;
     background:var(--cream);
@@ -171,21 +171,28 @@
   .preloader-inner{
     display:flex; flex-direction:column; align-items:center; gap:16px;
   }
-  .preloader-img{
+  .preloader-photo{
+    position:relative;
     width:150px; height:150px;
     border-radius:50%;
-    object-fit:cover;
     opacity:0;
     animation:preloaderFade 1.4s ease forwards;
   }
+  .preloader-img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  .preloader-img.active{ opacity:1; }
   .preloader-fallback{
-    width:150px; height:150px;
+    position:absolute; inset:0;
     border-radius:50%;
     background:#e7e0cd;
     display:none;
     align-items:center; justify-content:center;
-    opacity:0;
-    animation:preloaderFade 1.4s ease forwards;
   }
   .preloader-fallback svg{ width:36px; height:36px; color:#a89a7d; }
   .preloader-label{
@@ -202,9 +209,11 @@
     to{ opacity:1; transform:translateY(0) scale(1); }
   }
   @media (prefers-reduced-motion: reduce){
-    .preloader-img, .preloader-fallback, .preloader-label{ animation:none; opacity:1; }
+    .preloader-photo, .preloader-label{ animation:none; opacity:1; }
+    .preloader-img{ transition:none; }
   }
-   /* ---------- REVEAL (浮き上がりアニメーション) ---------- */
+ 
+  /* ---------- REVEAL (浮き上がりアニメーション) ---------- */
   .reveal{
     opacity:0;
     transform:translateY(28px);
