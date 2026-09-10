@@ -322,6 +322,20 @@
       revealEls.forEach(function(el){ el.classList.add('visible'); });
     }
   })();
+  
+    (function(){
+    var slides = document.querySelectorAll('#slideshow .slide');
+    var dots = document.querySelectorAll('#slideshow .dot');
+    var current = 0;
+    if(slides.length === 0) return;
+    setInterval(function(){
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }, 3200);
+  })();
 </script>
 </body>
 </html>
